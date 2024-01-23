@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaChevronDown, FaUser, FaBars } from "react-icons/fa";
+import { useSidebarContext } from "../Context/SidebarContext";
 import Sidebar from "./Sidebar";
-
 const Dropdown = ({ label, children }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -35,11 +35,8 @@ const Dropdown = ({ label, children }) => {
 };
 
 function Navbar() {
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const { isSideBarOpen, handleSidebarToggle } = useSidebarContext();
 
-  const handleSidebarToggle = () => {
-    setSidebarOpen(!isSidebarOpen);
-  };
   return (
     <>
       <nav className="bg-soriic p-9 flex justify-between items-center md:px-20 px-5">
@@ -118,16 +115,11 @@ function Navbar() {
           />
         </div>
       </nav>
-      {isSidebarOpen && (
+      {isSideBarOpen && (
         <div
-          className="overlay fixed top-0 left-0 w-full h-full bg-black opacity-80 z-10"
+          className="overlay fixed top-0 left-0 w-full h-full bg-black opacity-80 z-50"
           onClick={handleSidebarToggle}
-        >
-          <Sidebar
-            isOpen={isSidebarOpen}
-            handleSidebarToggle={handleSidebarToggle}
-          />
-        </div>
+        ></div>
       )}
     </>
   );

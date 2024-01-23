@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSidebarContext } from "../Context/SidebarContext";
 
-function Sidebar({ isOpen, handleSidebarToggle }) {
+function Sidebar() {
+  const { isSideBarOpen } = useSidebarContext();
   const [showInsightsDropdown, setShowInsightsDropdown] = useState(false);
 
   const handleInsightsClick = () => {
@@ -12,7 +14,9 @@ function Sidebar({ isOpen, handleSidebarToggle }) {
     <>
       <AnimatePresence>
         <motion.div
-          className="w-[280px] h-screen fixed left-0 top-0 bg-white pt-10 "
+          className={`w-[280px] h-screen  bg-soriic pt-10 fixed top-0 left-0 transition-transform duration-500  ${
+            isSideBarOpen ? "translate-x-0" : "translate-x-[-100%]"
+          }`}
           style={{ zIndex: 1000 }}
         >
           <div className="p-2 flex justify-center items-center">
@@ -54,7 +58,7 @@ function Sidebar({ isOpen, handleSidebarToggle }) {
                       initial={{ maxHeight: 0 }}
                       animate={{ maxHeight: 400 }}
                       exit={{ maxHeight: 0 }}
-                      transition={{ duration: 1, ease: "linear" }}
+                      transition={{ duration: 1.5 }}
                     >
                       <motion.li
                         className="cursor-pointer hover:text-mainColor transition-all duration-300 border-b p-2"
