@@ -1,3 +1,11 @@
+@import "../node_modules/animate.css/animate.min.css";
+
+body {
+  scroll-behavior: smooth;
+  margin: 0;
+  padding: 0;
+}
+
 @keyframes slideUp {
   from {
     transform: translateY(10%);
@@ -11,4 +19,34 @@
 
 .slide-up-enter {
   animation: slideUp 0.4s ease-out;
+}
+
+#dropdown:hover #dropdown-content {
+  display: block;
+  min-height: 60px;
+  animation: slideUp 0.4s ease-out;
+}
+
+#base-animation {
+  position: absolute;
+  top: 40%;
+  left: -20px;
+}
+
+#aboutBox::before {
+  position: absolute;
+  content: "";
+  left: -40px;
+  top: 0;
+  height: 30px;
+  width: 30px;
+  background: #ff3e66;
+  border: 6px solid #2a182d;
+  border-radius: 50%;
+}
+
+#sidebar-dropdown.active {
+  display: block;
+  max-height: 100px;
+  transition: all 0.5s ease-in-out;
 }

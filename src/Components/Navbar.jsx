@@ -1,45 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaChevronDown, FaUser, FaBars } from "react-icons/fa";
 import { useSidebarContext } from "../Context/SidebarContext";
-import Sidebar from "./Sidebar";
-const Dropdown = ({ label, children }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleMouseEnter = () => {
-    setIsOpen(true);
-  };
-
-  const handleMouseLeave = (e) => {
-    setIsOpen(false);
-  };
-
-  return (
-    <li className="cursor-pointer relative">
-      <a
-        className="font-normal text-textColor transition-all duration-300 hover:text-mainColor flex flex-row justify-center items-center gap-1 "
-        onMouseEnter={handleMouseEnter}
-      >
-        {label}
-        <FaChevronDown size={10} />
-      </a>
-      <ul
-        className={`absolute top-10 left-0 p-2 rounded-sm bg-white w-[200px] ${
-          isOpen ? "block transition-all duration-300 slide-up-enter" : "hidden"
-        } `}
-        onMouseLeave={handleMouseLeave}
-      >
-        {children}
-      </ul>
-    </li>
-  );
-};
+import { NavLink } from "react-router-dom";
 
 function Navbar() {
   const { isSideBarOpen, handleSidebarToggle } = useSidebarContext();
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPos = window.scrollY;
+      if (scrollPos > 100) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const navbarClass = isScrolled
+    ? "navbar-fixed bg-white animate__animated animate__slideInDown fixed top-0 w-full p-5 z-50"
+    : "bg-sorric p-3 animate__animated animate__fadeInUp";
 
   return (
     <>
-      <nav className="bg-soriic p-9 flex justify-between items-center md:px-20 px-5">
+      <nav
+        className={`transition-all duration-150 ease-in-out flex justify-between items-center lg:px-10 px-5 ${navbarClass}`}
+      >
         <div className="flex justify-between items-center gap-16">
           <a href="/">
             <img
@@ -49,14 +42,14 @@ function Navbar() {
               className="h-10 cursor-pointer"
             />
           </a>
-          <ul className="justify-between items-center gap-5 hidden lg:flex">
+          <ul className="justify-between items-start gap-5 hidden lg:flex">
             <li>
-              <a
+              <NavLink
                 className="font-normal text-textColor transition-all duration-300 hover:text-mainColor"
-                href="#"
+                to={"/"}
               >
                 Home
-              </a>
+              </NavLink>
             </li>
             <li>
               <a
@@ -74,14 +67,23 @@ function Navbar() {
                 Blogs
               </a>
             </li>
-            <Dropdown label="Insights">
-              <li className="font-normal p-2 transition-all duration-300 hover:translate-x-4 cursor-pointer hover:text-mainColor">
-                <a href="#">Projects</a>
-              </li>
-              <li className="font-normal p-2 transition-all duration-300 hover:translate-x-4 cursor-pointer hover:text-mainColor">
-                FAQ
-              </li>
-            </Dropdown>
+            <li id="dropdown" className=" cursor-pointer relative inline-block">
+              <span className="font-normal text-textColor transition-all duration-500 hover:text-mainColor cursor-pointer flex justify-center items-center gap-2">
+                Insights
+                <FaChevronDown size={10} />
+              </span>
+              <ul
+                id="dropdown-content"
+                className="bg-white rounded-md hidden absolute min-w-40 min-h-0 p-2 top-6"
+              >
+                <li className="font-normal pt-1 pb-2 pl-2 transition-all duration-300 ease-in-out hover:text-mainColor transfrom hover:translate-x-3 text-[14px]">
+                  <a href="#">Projects</a>
+                </li>
+                <li className="font-normal pt-1 pb-2 pl-2 transition-all duration-300 ease-in-out hover:text-mainColor transform hover:translate-x-3 text-[14px]">
+                  FAQ
+                </li>
+              </ul>
+            </li>
             <li>
               <a
                 className="font-normal text-textColor transition-all duration-300 hover:text-mainColor"
@@ -91,12 +93,12 @@ function Navbar() {
               </a>
             </li>
             <li>
-              <a
+              <NavLink
                 className="font-normal text-textColor transition-all duration-300 hover:text-mainColor"
-                href="#"
+                to={"/contact"}
               >
                 Contact Us
-              </a>
+              </NavLink>
             </li>
           </ul>
         </div>
